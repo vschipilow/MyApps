@@ -1,0 +1,41 @@
+<!--
+//
+//  Sudoku.html
+//  MyApps
+//
+//  Created by Victor Schipilow on 16/4/2025.
+// -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+           Sudoku
+        </title>
+        <link rel="stylesheet" href="stylesheet.css">
+        <script src="sudoku.js"></script>
+    </head>
+    <body onload="onload();">
+        <a href="Home.html">&lt;</a>
+        <h1>
+            Sudoku
+        </h1>
+        <label for="gridType">
+            Value Range:
+        </label>
+        <select id="gridType" onChange="ctrl.changeGrid();">
+            <option value="33N" selected>1..9</option>
+            <option value="33A">A..I</option>
+            <option value="44N">1..G</option>
+            <option value="44A">A..P</option>
+            <option value="45N">1..K</option>
+            <option value="45A">A..T</option>
+        </select>
+        <br>
+        <br>
+        <table id="table">
+        </table>
+</body>
+</html>

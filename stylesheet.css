@@ -1,10 +1,10 @@
 :root {
     --color: #EEEEEE;
+    --border-color: #777777;
     --background: #222222;
     --hiBackground: #444444;
     --subheader: #BBBBBB;
 }
-
 body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 100%;
@@ -16,6 +16,7 @@ table, td, th {
     border-collapse: collapse;
     text-align: left;
     vertical-align: top;
+    border-color: #555555;
 }
 th {
     color: var(--subheader);
@@ -24,7 +25,7 @@ input {
     font-size: 1em;
     background: var(--background);
     border: 1px;
-    border-color: var(--color);
+    border-color: var(--border-color);
     border-style: solid;
 }
 input[type=text], input[type=date] {
@@ -95,4 +96,10 @@ select {
 }
 .subheader {
     color: var(--subheader);
+}
+.calculated {
+    color: #00CCCC;
+}
+.entered {
+    color: #FFFF00;
 }

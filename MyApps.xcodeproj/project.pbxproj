@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D4172D742DAF5387000DEE37 /* sudoku.js in Resources */ = {isa = PBXBuildFile; fileRef = D4172D732DAF5377000DEE37 /* sudoku.js */; };
 		D4197F582DAE4EB9003C2F8D /* favicon.ico in Resources */ = {isa = PBXBuildFile; fileRef = D4197F572DAE4EB9003C2F8D /* favicon.ico */; };
 		D4197F592DAE4EB9003C2F8D /* apple-touch-icon-precomposed.png in Resources */ = {isa = PBXBuildFile; fileRef = D4197F562DAE4EB9003C2F8D /* apple-touch-icon-precomposed.png */; };
 		D4197F5A2DAE4EB9003C2F8D /* apple-touch-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D4197F552DAE4EB9003C2F8D /* apple-touch-icon.png */; };
 		D457F9DE2DAC751400B5EF2E /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D457F9DD2DAC750100B5EF2E /* .gitignore */; };
 		D45A55132DAF20D600629ED6 /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = D45A55122DAF20D600629ED6 /* index.js */; };
+		D45FAD372DAF4E5B00ADBECC /* Sudoku.html in Resources */ = {isa = PBXBuildFile; fileRef = D45FAD362DAF4E4A00ADBECC /* Sudoku.html */; };
 		D4ECA4AD2DA8C54F007985B8 /* dictionary.js in Resources */ = {isa = PBXBuildFile; fileRef = D4ECA4AC2DA8C536007985B8 /* dictionary.js */; };
 		D4ECA4AF2DA8CB9B007985B8 /* V9Lib.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D4ECA4AE2DA8CB9B007985B8 /* V9Lib.sqlite */; };
 		D4F7CE292DA797FE00230CB9 /* stylesheet.css in Resources */ = {isa = PBXBuildFile; fileRef = D4F7CE282DA797FE00230CB9 /* stylesheet.css */; };
@@ -20,11 +22,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D4172D732DAF5377000DEE37 /* sudoku.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = sudoku.js; sourceTree = "<group>"; };
 		D4197F552DAE4EB9003C2F8D /* apple-touch-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "apple-touch-icon.png"; sourceTree = "<group>"; };
 		D4197F562DAE4EB9003C2F8D /* apple-touch-icon-precomposed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "apple-touch-icon-precomposed.png"; sourceTree = "<group>"; };
 		D4197F572DAE4EB9003C2F8D /* favicon.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = favicon.ico; sourceTree = "<group>"; };
 		D457F9DD2DAC750100B5EF2E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		D45A55122DAF20D600629ED6 /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
+		D45FAD362DAF4E4A00ADBECC /* Sudoku.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Sudoku.html; sourceTree = "<group>"; };
 		D4ECA4AC2DA8C536007985B8 /* dictionary.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = dictionary.js; sourceTree = "<group>"; };
 		D4ECA4AE2DA8CB9B007985B8 /* V9Lib.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = V9Lib.sqlite; sourceTree = "<group>"; };
 		D4F7CE172DA794F100230CB9 /* MyApps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyApps.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +59,8 @@
 		D4F7CE0E2DA794F100230CB9 = {
 			isa = PBXGroup;
 			children = (
+				D4172D732DAF5377000DEE37 /* sudoku.js */,
+				D45FAD362DAF4E4A00ADBECC /* Sudoku.html */,
 				D45A55122DAF20D600629ED6 /* index.js */,
 				D4197F552DAE4EB9003C2F8D /* apple-touch-icon.png */,
 				D4197F562DAE4EB9003C2F8D /* apple-touch-icon-precomposed.png */,
@@ -147,11 +153,13 @@
 				D4F7CE2B2DA7A9E300230CB9 /* Home.html in Resources */,
 				D4F7CE2D2DA7B20300230CB9 /* Dictionary.html in Resources */,
 				D4ECA4AF2DA8CB9B007985B8 /* V9Lib.sqlite in Resources */,
+				D4172D742DAF5387000DEE37 /* sudoku.js in Resources */,
 				D4ECA4AD2DA8C54F007985B8 /* dictionary.js in Resources */,
 				D4197F582DAE4EB9003C2F8D /* favicon.ico in Resources */,
 				D4197F592DAE4EB9003C2F8D /* apple-touch-icon-precomposed.png in Resources */,
 				D4197F5A2DAE4EB9003C2F8D /* apple-touch-icon.png in Resources */,
 				D4F7CE292DA797FE00230CB9 /* stylesheet.css in Resources */,
+				D45FAD372DAF4E5B00ADBECC /* Sudoku.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
