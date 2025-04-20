@@ -7,19 +7,16 @@
 
 "use strict";
 
-const columns = [ { name : "Word", subscript : 0 } ];
-
 function submitSql () {
     const word = window.document.getElementById("word").value;
     const sql = createSql(word);
-    const body = JSON.stringify({ sql, columns });
+    const body = JSON.stringify({ sql });
     if (window.navigator.userAgent.includes('(Macintosh;')) {
-        fetch('dictionary', { method: "POST", body } )
+        fetch('Words', { method: "POST", body } )
         .then(x => x.text())
         .then(y => receiveFromNative(y));
     } else {
-        window.webkit.messageHandlers.Dictionary.postMessage({ sql, columns });
-        receiveFromNative('message sent');
+        window.webkit.messageHandlers.Words.postMessage({ sql });
     }
 }
 
@@ -27,7 +24,7 @@ function receiveFromNative(output) {
     const j = JSON.parse(output);
     const results = [];
     for (let row of j.rows) {
-        results.push(row.Word); 
+        results.push(row.word);
     }
     const start = '<tr><td>';
     const end = '</td></tr>\n';
@@ -36,7 +33,7 @@ function receiveFromNative(output) {
 }
 
 function createSql(word) {
-    return ('SELECT Word FROM Words\nWHERE ' + whereClause(word));
+    return ('SELECT word FROM Words\nWHERE ' + whereClause(word));
 }
 
 function whereClause(word) {
@@ -44,7 +41,7 @@ function whereClause(word) {
     let start = 0;
     let len = 0;
     let subString = '';
-    let where = 'LENGTH(Word) = ' + word.length;
+    let where = 'LENGTH(word) = ' + word.length;
 
     for (let x of word.toLowerCase().split('')) {
         i++;
@@ -66,7 +63,7 @@ function whereClause(word) {
 
     function finishSubString () {
         if (start > 0) {
-            where = where + ' AND\nSUBSTR(Word, ' + start + ', ' + len + ") = '" + subString + "'";
+            where = where + ' AND\nSUBSTR(word, ' + start + ', ' + len + ") = '" + subString + "'";
             start = 0;
         }
     }

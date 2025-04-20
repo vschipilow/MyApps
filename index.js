@@ -6,6 +6,7 @@ import sqlite3 from '/opt/homebrew/Cellar/node/23.5.0/lib/node_modules/sqlite3/l
 
 createServer((req, res) => {
     const filename = req.url.substring(1);
+    console.log(filename);
     switch (req.method) {
         case 'GET':
             console.log('loading ' + filename);
@@ -20,29 +21,29 @@ createServer((req, res) => {
                 body += data;
             }).on('end', () => {
                 const j = JSON.parse(body);
-                switch (filename) {
-                    case 'dictionary':
-                        const db = new sqlite3.Database('V9Lib.sqlite');
-                        const rows = [];
-                        db.each(j.sql, (err, row) => {
-                            if (err) return console.log(err);
-                            const cols = [];
-                            for (let x of j.columns) {
-                                cols.push('"' + x.name + '": "' + row[x.name] + '"');
-                            }
-                            rows.push(cols.join(', '));
-                        });
-                        db.close((err) => {
-                            if (err) return console.log(err);
-                            res.end('{ "rows" : [ { ' + rows.join(' }, { ') + ' } ] }');
-                        });
-                        break;
-                    default:
-                        console.log('unknown "POST" = ' + filename);
-                }
+                const db = new sqlite3.Database(filename + '.sqlite');
+                const rows = [];
+                let rowCount = 0;
+                db.each(j.sql, (err, row) => {
+                    if (err) return console.log(err);
+                    rowCount++;
+                    if (rowCount < 1000) {
+                        const cols = [];
+                        for (let x in row) {
+                            cols.push('"' + x + '": "' + row[x] + '"');
+                        }
+                        rows.push(cols.join(', '));
+                    }
+                });
+                db.close((err) => {
+                    if (err) return console.log(err);
+                    const rowsString = (rows.length == 0) ? '' : '{ ' + rows.join(' }, { ') + ' }';
+                    res.end('{ "rows" : [ ' + rowsString + ' ], "rowsFound" : ' + rowCount +
+                            ', "rowsReturned" : ' + rows.length + ' }');
+                });
             });
             break;
     }
 }).listen(8081);
 
-console.log('http://localhost:8081/Dictionary.html');
+console.log('http://localhost:8081/Home.html');

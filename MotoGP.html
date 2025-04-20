@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+           MotoGP
+        </title>
+        <link rel="stylesheet" href="stylesheet.css">
+        <script src="motogp.js"></script>
+    </head>
+    <body onload="onLoad();">
+        <a href="Home.html">&lt;</a>
+        <h1>
+           <div id="heading"></div>
+        </h1>
+        <table id="table">
+        </table>
+        <br>
+        <table>
+           <tr>
+               <td>
+                   <label for="comp">Competition</label>
+                   <select id="comp" onchange="onLoad();">
+                       <option value="2025-MotoGP" selected>2025 MotoGP</option>
+                       <option value="2025-Moto2">2025 Moto2</option>
+                       <option value="2025-Moto3">2025 Moto3</option>
+                       <option value="2024-MotoGP">2024 MotoGP</option>
+                       <option value="2024-Moto2">2024 Moto2</option>
+                       <option value="2024-Moto3">2024 Moto3</option>
+                       <option value="2023-MotoGP">2023 MotoGP</option>
+                       <option value="2023-Moto2">2023 Moto2</option>
+                       <option value="2023-Moto3">2023 Moto3</option>
+                       <option value="2022-MotoGP">2022 MotoGP</option>
+                       <option value="2022-Moto2">2022 Moto2</option>
+                       <option value="2022-Moto3">2022 Moto3</option>
+                   </select>
+               </td>
+               <td>&nbsp;&nbsp;&nbsp;</td>
+               <td>
+                   <label for="orderBy">Sort By</label>
+                   <select id="orderBy" onchange="onLoad();">
+                       <option value="round([Number])" selected>Number</option>
+                       <option value="Surname, [First Name]">Name</option>
+                       <option value="Team">Team</option>
+                       <option value="Bike">Bike</option>
+                       <option value="Country">Country</option>
+                       <option value="Age">Age</option>
+                   </select>
+               </td>
+           </tr>
+        </table>
+    </body>
+</html>
