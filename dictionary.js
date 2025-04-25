@@ -20,6 +20,16 @@ function submitSql () {
     }
 }
 
+function keyPressed () {
+    const wordElement = window.document.getElementById('word');
+    const word = wordElement.value;
+    const result = [];
+    for (let x of word.toLowerCase()) {
+        result.push(/[a-z]/.test(x) ? x : '?');
+    }
+    wordElement.value = result.join('');
+}
+
 function receiveFromNative(output) {
     const j = JSON.parse(output);
     const results = [];

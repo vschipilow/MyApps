@@ -6,42 +6,101 @@
 //
 "use strict";
 
-let inputFields;
+let p;
 
 function onload() {
-    inputFields = { surname: '', firstName: '', middleName: '', spouse: '',
-        flatNo: '', streetNo: '', streetName: '', town: '', state: '' };
-    window.document.getElementById('inputDiv').innerHTML = generateInput();
+    p = { viewState: 1, prevViewState: 0, spinnerHTML: extractHTML('table'),
+          searchDiv: { html: "", fields: { surname: "", firstName: "", middleName: "", spouse: "", flatNo: "", 
+                                           streetNo: "", streetName: "", town: "", state: "" } },
+          resultDiv: { html: "", fields: { orderBy: "Address" } },
+          addressDiv: { html: "", fields: {} } 
+    };
+    extractValues('resultDiv');
+    extractValues('addressDiv');
+    clearHTML('resultDiv');
+    clearHTML('addressDiv');
 }
 
-function generateInput() {
-    return `
-    <input type="text" id="surname" placeholder="Surname" value="${inputFields.surname}"><br><br>
-    <input type="text" id="firstName" placeholder="First Name" value="${inputFields.firstName}"><br><br>
-    <input type="text" id="middleName" placeholder="Middle Name" value="${inputFields.middleName}"><br><br>
-    <input type="text" id="spouse" placeholder="Spouse" value="${inputFields.spouse}"><br><br>
-    <input type="text" id="flatNo" placeholder="Flat" value="${inputFields.flatNo}"><br><br>
-    <input type="text" id="streetNo" placeholder="House Number" value="${inputFields.streetNo}"><br><br>
-    <input type="text" id="streetName" placeholder="Street" value="${inputFields.streetName}"><br><br>
-    <input type="text" id="town" placeholder="Town" value="${inputFields.town}"><br><br>
-    <select id="state">
-        <option value=""${ inputFields.state == '' ? ' selected' : ''}>All States</option>
-        <option value="NSW"${ inputFields.state == 'NSW' ? ' selected' : ''}>N.S.W.</option>
-        <option value="VIC"${ inputFields.state == 'VIC' ? ' selected' : ''}>VIC</option>
-        <option value="QLD"${ inputFields.state == 'QLD' ? ' selected' : ''}>QLD</option>
-        <option value="WA"${ inputFields.state == 'WA' ? ' selected' : ''}>W.A.</option>
-        <option value="SA"${ inputFields.state == 'SA' ? ' selected' : ''}>S.A.</option>
-        <option value="TAS"${ inputFields.state == 'TAS' ? ' selected' : ''}>TAS</option>
-        <option value="ACT"${ inputFields.state == 'ACT' ? ' selected' : ''}>A.C.T.</option>
-        <option value="NT"${ inputFields.state == 'NT' ? ' selected' : ''}>N.T.</option>
-    </select>
-    `;
+function clearHTML (id) {
+    window.document.getElementById(id).innerHTML = '';
 }
 
-function lookup() {
-    for (let x in inputFields) {
-        const y = window.document.getElementById(x).value;
-        inputFields[x] = (y) ? y.trim() : '';
+function clearValue (id) {
+    window.document.getElementById(id).value = '';
+}
+
+function extractValues(id) {
+    for (let x in p[id].fields) {
+        p[id].fields[x] = extractValue(x);
+    }
+    p[id].html = extractHTML(id);
+}
+
+function extractValue (id) {
+    const x = window.document.getElementById(id);
+    if (x) {
+        const y = x.value;
+        if (y) return y.trim();
+    }
+    return "";
+}
+
+function extractHTML (id) {
+    const x = window.document.getElementById(id);
+    if (x) return x.innerHTML;
+    return "";
+}
+
+function resetValues (id) {
+    setHTML(id, p[id].html);
+    for (let x in p[id].fields) {
+        setValue(x, p[id].fields[x]);
+    }
+}
+
+function setValue (id, value) {
+    const x = window.document.getElementById(id);
+    if (x) {
+        x.value = value;
+    }
+}
+
+function setHTML (id, html) {
+    const x = window.document.getElementById(id);
+    if (x) {
+        x.innerHTML = html;
+    }
+}
+
+function lookup(viewState) {
+    p.prevViewState = p.viewState;
+    p.viewState = viewState;
+    switch (viewState) {
+        case 1:
+            extractValues('searchDiv');
+            clearHTML('searchDiv');
+            resetValues('resultDiv');
+            setHTML('table', p.spinnerHTML);
+            p.viewState++;
+            break;
+        case 2:
+            extractValues('resultDiv');
+            if (p.prevViewState == 3) {
+                clearHTML('addressDiv');
+                return;
+            }
+            setHTML('table', p.spinnerHTML);
+            break;
+        case 3:
+            if (p.prevViewState == 2) {
+                extractValues('resultDiv');
+                resetValues('addressDiv');
+                setHTML('addresses2', extractHTML('addresses'));
+                setValue('addresses2', extractValue('addresses'));
+                clearHTML('resultDiv');
+            }
+            setHTML('table2', p.spinnerHTML);
+            break;
     }
     const sql = createSql();
     if (window.navigator.userAgent.includes('(Macintosh;')) {
@@ -55,21 +114,29 @@ function lookup() {
 }
 
 function back () {
-    window.document.getElementById('inputDiv').innerHTML = generateInput();
-    window.document.getElementById('outputDiv').innerHTML = '';
+    p.prevViewState = p.viewState;
+    switch(p.viewState) {
+        case 2:
+            resetValues('searchDiv');
+            extractValues('resultDiv');
+            clearHTML('resultDiv');
+            p.viewState = 1;
+            break;
+        case 3:
+            resetValues('resultDiv');
+            clearHTML('addressDiv');
+            p.viewState = 2;
+            break;
+    }
 }
 
 function receiveFromNative(output) {
-    window.document.getElementById('inputDiv').innerHTML = '';
     const j = JSON.parse(output);
-    const results = ['<a href="javascript:back();">^</a>','<table>'];
-    const start = (window.navigator.userAgent.includes('(Macintosh;'))
-    ? ['<tr><td class="swiftUIodd" style="font-size: 1em;">',
-       '<tr><td class="swiftUIeven" style="font-size: 1em;">',
-       '<tr><td class="swiftUIheader" style="font-size: 1em;">']
-    : ['<tr><td class="swiftUIodd" style="">',
-       '<tr><td class="swiftUIeven">',
-       '<tr><td class="swiftUIheader">'];
+    const table = [];
+    const addresses = [];
+    const start = ['<tr><td class="swiftUIodd">',
+                   '<tr><td class="swiftUIeven">',
+                   '<tr><td class="swiftUIheader">'];
     const end = '</td></tr>\n';
     let i = 2;
     let rowCount = 0;
@@ -80,20 +147,52 @@ function receiveFromNative(output) {
             case 2:
                 break;
             case 3:
+                if (p.viewState == 2 && p.prevViewState == 1) {
+                    addresses.push({ id: row.AddressId, address: row.Address, sortKey: row.AddressSort });
+                }
                 i = 0;
                 break;
             default:
+                if (p.viewState == 2 && p.prevViewState == 1) {
+                    const item = addresses.find((value) => {
+                        return value.id == row.AddressId;
+                    });
+                    if (item == undefined) {
+                        addresses.push({ id: row.AddressId, address: row.Address, sortKey: row.AddressSort });
+                    };
+                }
                 i = 1 - i;
                 break;
         }
-        results.push(start[i] + row.Lookup.replace(/ /g, '&nbsp;') + end);
+        table.push(start[i] + row.Lookup.replace(/ /g, '&nbsp;') + end);
     }
-    results.push('</table>');
-    window.document.getElementById("outputDiv").innerHTML = results.join('');
+    switch (p.viewState) {
+        case 2:
+            if (p.prevViewState == 1) {
+                const addressOptions = ['<option value=" ">-- select address --</option>'];
+                addresses.sort((a, b) => {
+                    if (a.sortKey < b.sortKey) return -1;
+                    if (a.sortKey > b.sortKey) return +1;
+                    return 0;
+                });
+                for (let x of addresses) {
+                    addressOptions.push('<option value="' + x.id + '">' + x.address + '</option>')
+                }
+                setHTML('addresses', addressOptions.join(''));
+            }
+            setHTML('table', table.join(''));
+            break;
+        case 3:
+            setHTML('table2', table.join(''));
+            break;
+    }
 }
 
 function whereStatement() {
     const whereClause = [];
+    if (p.viewState == 3) {
+        return "AddressId = '" + extractValue('addresses2') + "'";
+    }
     const spouse = getInput('spouse');
     addToWhere('surname', 'Surname', whereClause);
     addNamesToWhere(whereClause);
@@ -141,13 +240,14 @@ function addNamesToWhere(whereClause) {
 }
 
 function getInput (name) {
-    return inputFields[name].toUpperCase().replace(/\*/g, '%');
+    return p.searchDiv.fields[name].toUpperCase().replace(/\*/g, '%');
 }
 
 function createSql() {
     const space = ''.padStart(100, ' ');
     const where = whereStatement();
     const spouse = getInput('spouse');
+    const orderBy = (p.viewState == 3) ? 'Age' : p.resultDiv.fields.orderBy;
     const sql = [
     // 0 - All
     `WITH
@@ -170,9 +270,20 @@ function createSql() {
     // 2 - All
     `Lookup AS
      ( SELECT '3' AS Sort1,
-              [State] || ' ' || Locality || ' ' || StreetName ||
-              SUBSTR(' 000000', 1, 7 - LENGTH(StreetNo)) || StreetNo || ' ' || Property ||
-              SUBSTR(' 000000', 1, 7 - LENGTH(FlatNo)) || FlatNo AS Sort2,
+              CASE WHEN '${spouse}' <> '' OR '${orderBy}' = 'Address' THEN
+                        [State] || ' ' || Locality || ' ' || StreetName ||
+                        SUBSTR(' 000000', 1, 7 - LENGTH(StreetNo)) || StreetNo || ' ' || Property ||
+                        SUBSTR(' 000000', 1, 7 - LENGTH(FlatNo)) || FlatNo ||
+                        CASE WHEN '${spouse}' <> ''
+                                  THEN GivenNames ELSE BirthDate
+                        END 
+                   WHEN '${orderBy}' = 'Surname' THEN
+                        Surname || ' ' || GivenNames
+                   WHEN '${orderBy}' = 'GivenNames' THEN
+                        GivenNames || ' ' || Surname
+                   WHEN '${orderBy}' = 'Age' THEN
+                        BirthDate
+              END AS Sort2,
               GivenNames,
               Surname,
               Gender,
@@ -211,6 +322,10 @@ function createSql() {
                         END || ', '
               END ||
               Locality || ' ' || [State] || ' ' || Postcode AS [Address],
+              AddressId,
+              [State] || ' ' || Locality || ' ' || StreetName ||
+              SUBSTR(' 000000', 1, 7 - LENGTH(StreetNo)) || StreetNo || ' ' || Property ||
+              SUBSTR(' 000000', 1, 7 - LENGTH(FlatNo)) || FlatNo AS AddressSort,
               '${space}' AS Space
          FROM Lookup2
     `,
@@ -241,6 +356,8 @@ function createSql() {
               'Age' AS Age,
               'BirhtDay' AS BirthDate,
               'Address' AS [Address],
+              'AddressId' as AddressId,
+              'AddressSort' as AddressSort,
               '${space}' AS Space
      ),
      MaxLens AS
@@ -259,6 +376,8 @@ function createSql() {
               '---' AS Age,
               '--------' AS BirthDate,
               SUBSTR(Hyphens, 1, MaxAddressLen) AS [Address],
+              '' AS AddressId,
+              '' AS AddressSort,
               '${space}' AS Space
          FROM MaxLens
        UNION
@@ -270,6 +389,8 @@ function createSql() {
               Age,
               BirthDate,
               [Address],
+              AddressId,
+              AddressSort,
               Space
          FROM Lookup
      )
@@ -281,7 +402,10 @@ function createSql() {
             a.Age || ' ' ||
             a.BirthDate || SUBSTR(a.Space, 1, 10 - LENGTH(a.BirthDate)) ||
             a.[Address] ||
-            SUBSTR(a.Space, 1, b.MaxAddressLen + 1 - LENGTH(a.[Address])) AS 'Lookup'
+            SUBSTR(a.Space, 1, b.MaxAddressLen + 1 - LENGTH(a.[Address])) AS 'Lookup',
+            a.[Address],
+            a.AddressId,
+            a.AddressSort
        FROM Uline AS a
        JOIN MaxLens AS b
       ORDER BY a.Sort1, a.Sort2

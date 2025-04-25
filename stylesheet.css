@@ -4,9 +4,10 @@
     --background: #222222;
     --hiBackground: #444444;
     --subheader: #BBBBBB;
+    --swiftFontSize: .7em;
 }
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif, Menlo;
     font-size: 100%;
     background: #181800;
     color: var(--color);
@@ -105,17 +106,18 @@ select, option {
     color: #FFFF00;
 }
 .swiftUIodd {
-    font-family: monospace;
-    font-size: 0.625em;
+    font-family: Menlo;
+    font-size: var(--swiftFontSize);
     background: var(--hiBackground);
 }
 .swiftUIeven {
-    font-family: monospace;
-    font-size: 0.625em;
+    font-family: Menlo;
+    font-size: var(--swiftFontSize);
     background: var(--background);
 }
 .swiftUIheader {
-    font-family: monospace;
-    font-size: 0.625em;
+    font-family: Menlo;
+    font-size: var(--swiftFontSize);
+    background: var(--background);
     color: gray;
 }

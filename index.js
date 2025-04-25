@@ -6,13 +6,19 @@ import sqlite3 from '/opt/homebrew/Cellar/node/23.5.0/lib/node_modules/sqlite3/l
 
 createServer((req, res) => {
     const filename = req.url.substring(1);
-    console.log(filename);
     switch (req.method) {
         case 'GET':
             console.log('loading ' + filename);
             readFile(filename, (err, data) => {
                 if (err) return console.log(err);
-                res.end(data);
+                // switch(filename) {
+                //     case 'stylesheet.css':
+                //         res.end(`${data}`.replace(/0.625/, '1'));
+                //         break;
+                //     default:
+                        res.end(data);
+                //         break;
+                // }
             });
             break;
         case 'POST':
@@ -24,6 +30,7 @@ createServer((req, res) => {
                 const db = new sqlite3.Database(filename + '.sqlite');
                 const rows = [];
                 let rowCount = 0;
+                // console.log(j.sql);
                 db.each(j.sql, (err, row) => {
                     if (err) return console.log(err);
                     rowCount++;
